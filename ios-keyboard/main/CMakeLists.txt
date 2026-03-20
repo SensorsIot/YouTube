@@ -1,0 +1,13 @@
+idf_component_register(SRCS "app_main.c"
+                       "nvs_store.c"
+                       "udp_log.c"
+                       "wifi_prov.c"
+                       "ble_nus.c"
+                       "ota_update.c"
+                       "http_server.c"
+                       "watchdog.c"
+                       "hid_keyboard.c"
+                       "layout_manager.c"
+                       "text_engine.c"
+                  INCLUDE_DIRS "."
+                  EMBED_FILES "portal.html")

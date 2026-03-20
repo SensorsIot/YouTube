@@ -1,0 +1,8 @@
+# Target
+CONFIG_IDF_TARGET="esp32s3"
+
+# Flash size — default 4MB
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# TinyUSB HID keyboard (Phase 2)
+CONFIG_TINYUSB_HID_COUNT=1
