@@ -1,0 +1,50 @@
+{
+    "name": "YouTube",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.11"
+        },
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        }
+    },
+    "runArgs": ["--name", "youtube"],
+    "appPort": "2827:2222",
+    "remoteUser": "dev",
+    "postStartCommand": "sudo /etc/init.d/ssh start",
+    "postCreateCommand": "git config --global credential.helper store && git config --global core.sshCommand 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' && (git clone https://github.com/SensorsIot/claude.git ~/.claude 2>/dev/null || (cd ~/.claude && git pull)) && cp -f ~/.claude/tmux.conf ~/.tmux.conf && mkdir -p ~/.claude-data/projects && ln -sf ~/.claude-data/.credentials.json ~/.claude/.credentials.json && ln -sf ~/.claude-data/history.jsonl ~/.claude/history.jsonl && rm -rf ~/.claude/projects && ln -sf ~/.claude-data/projects ~/.claude/projects && ln -sf ~/.claude-data/.claude.json ~/.claude.json && mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && npm install -g @anthropic-ai/claude-code && echo 'alias superclaude=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc && mkdir -p ~/.githooks && cp ~/.claude/githooks/pre-push ~/.githooks/pre-push && chmod +x ~/.githooks/pre-push && git config --global core.hooksPath ~/.githooks && echo 'export PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.bashrc",
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh/authorized_keys,target=/home/dev/.ssh/authorized_keys,type=bind,readonly",
+        "source=${localEnv:HOME}/.ssh/id_ed25519,target=/home/dev/.ssh/id_ed25519,type=bind,readonly",
+        "source=${localEnv:HOME}/.git-credentials,target=/home/dev/.git-credentials,type=bind,readonly",
+        "source=${localWorkspaceFolder}/.claude-data,target=/home/dev/.claude-data,type=bind"
+    ],
+    "containerEnv": {
+        "INFLUXDB_TOKEN": "${localEnv:INFLUXDB_TOKEN}",
+        "INFLUXDB_URL": "${localEnv:INFLUXDB_URL}",
+        "INFLUXDB_ORG": "${localEnv:INFLUXDB_ORG}",
+        "HA_TOKEN": "${localEnv:HA_TOKEN}",
+        "HA_TOKEN_NODERED": "${localEnv:HA_TOKEN_NODERED}",
+        "HA_URL": "${localEnv:HA_URL}",
+        "GRAFANA_URL": "${localEnv:GRAFANA_URL}",
+        "GRAFANA_USER": "${localEnv:GRAFANA_USER}",
+        "GRAFANA_PASSWORD": "${localEnv:GRAFANA_PASSWORD}",
+        "TELEGRAM_BOT_TOKEN": "${localEnv:TELEGRAM_BOT_TOKEN}",
+        "GH_TOKEN": "${localEnv:GH_TOKEN}",
+        "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+        "SMART_USER": "${localEnv:SMART_USER}",
+        "SMART_PASSWORD": "${localEnv:SMART_PASSWORD}"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python"
+            ]
+        }
+    }
+}
